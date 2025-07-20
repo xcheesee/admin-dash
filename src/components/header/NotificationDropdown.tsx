@@ -23,7 +23,7 @@ export default function NotificationDropdown() {
   };
   return (
     <div className="relative">
-      <button
+      {/*<button
         className="relative dropdown-toggle flex items-center justify-center text-gray-500 transition-colors bg-white border border-gray-200 rounded-full hover:text-gray-700 h-11 w-11 hover:bg-gray-100 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white"
         onClick={handleClick}
       >
@@ -48,7 +48,7 @@ export default function NotificationDropdown() {
             fill="currentColor"
           />
         </svg>
-      </button>
+      </button>*/}
       <Dropdown
         isOpen={isOpen}
         onClose={closeDropdown}
@@ -80,7 +80,7 @@ export default function NotificationDropdown() {
         </div>
         <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
           {/* Example notification items */}
-          <li>
+          {/*<li>
             <DropdownItem
               onItemClick={closeDropdown}
               className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
@@ -369,15 +369,15 @@ export default function NotificationDropdown() {
                 </span>
               </span>
             </DropdownItem>
-          </li>
+          </li>*/}
           {/* Add more items as needed */}
         </ul>
-        <Link
+        {/*<Link
           href="/"
           className="block px-4 py-2 mt-3 text-sm font-medium text-center text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700"
         >
           View All Notifications
-        </Link>
+        </Link>*/}
       </Dropdown>
     </div>
   );

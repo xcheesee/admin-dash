@@ -39,12 +39,12 @@ const navItems: NavItem[] = [
     path: "/categorias-cortes"
     //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
-  {
+  /*{
     icon: <GridIcon />,
     name: "Unidades de Medida",
     path: "/unidades-cortes"
     //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
+  },*/
   /*{
     icon: <CalenderIcon />,
     name: "Calendar",
