@@ -29,10 +29,23 @@ type NavItem = {
 const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
-    name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+    name: "Cortes",
+    path: "/cortes"
+    //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
+    icon: <GridIcon />,
+    name: "Categorias de Cortes",
+    path: "/categorias-cortes"
+    //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+  },
+  {
+    icon: <GridIcon />,
+    name: "Unidades de Medida",
+    path: "/unidades-cortes"
+    //subItems: [{ name: "Ecommerce", path: "/", pro: false }],
+  },
+  /*{
     icon: <CalenderIcon />,
     name: "Calendar",
     path: "/calendar",
@@ -60,11 +73,11 @@ const navItems: NavItem[] = [
       { name: "Blank Page", path: "/blank", pro: false },
       { name: "404 Error", path: "/error-404", pro: false },
     ],
-  },
+  },*/
 ];
 
 const othersItems: NavItem[] = [
-  {
+  /*{
     icon: <PieChartIcon />,
     name: "Charts",
     subItems: [
@@ -91,7 +104,7 @@ const othersItems: NavItem[] = [
       { name: "Sign In", path: "/signin", pro: false },
       { name: "Sign Up", path: "/signup", pro: false },
     ],
-  },
+  },*/
 ];
 
 const AppSidebar: React.FC = () => {
@@ -374,7 +387,7 @@ const AppSidebar: React.FC = () => {
             </div>
           </div>
         </nav>
-        {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null}
+        {/*isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null*/}
       </div>
     </aside>
   );
