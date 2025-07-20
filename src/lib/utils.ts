@@ -1,3 +1,3 @@
-const chunk = (arr: any[], n: number): any[] => arr.length ? [arr.slice(0, n), ...chunk(arr.slice(n), n)] : [];
+const chunkArray = (arr: any[], chunkSize: number): any[] => arr.length ? [arr.slice(0, chunkSize), ...chunkArray(arr.slice(chunkSize), chunkSize)] : [];
 
-export { chunk }
+export { chunkArray }
