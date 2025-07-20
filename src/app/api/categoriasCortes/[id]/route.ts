@@ -8,7 +8,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{id: numbe
             throw new Error("Dados imcompletos");
         }
 
-        await prisma.corte.update({
+        await prisma.categoriaCorte.update({
             where: {id: Number(categoriaId)},
             data: {
                 nome: categoriaData.nome,
@@ -35,14 +35,14 @@ export async function DELETE(req: Request, { params }: { params: Promise<{id: nu
         const { id: categoriaId } = await params;
 
         const cortesDaCategoria = await prisma.corte.findFirst({
-            where: {categoriaId: categoriaId}
+            where: {categoriaId: Number(categoriaId)}
         });
 
         if(!!cortesDaCategoria) {
             throw new Error("Categoria com cortes vinculados");
         }
 
-        await prisma.corte.delete({
+        await prisma.categoriaCorte.delete({
             where: {id: Number(categoriaId)},
         });
 

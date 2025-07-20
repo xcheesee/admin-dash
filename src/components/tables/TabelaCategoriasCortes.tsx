@@ -22,6 +22,7 @@ import Spinner from "../ui/Spinner";
 export default function TabelaCategoriasCortes() {
   const [categoriasCortes, setCategoriasCortes] = useState<CorteComCategoria[]>([]);
   const [selectedCategoriaCorte, setSelectedCategoriaCorte] = useState<CorteComCategoria | null>(null);
+  const [errorFeedback, setErrorFeedback] = useState<string>("");
 
   const [loadingCategoriasCortes, setLoadingCategoriasCortes] = useState<boolean>(false);
   const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
@@ -49,6 +50,7 @@ export default function TabelaCategoriasCortes() {
   }
 
   async function onDeletePress() {
+    setErrorFeedback("");
     setLoadingDelete(true);
     const res = await fetch('/api/categoriasCortes/' + selectedCategoriaCorte?.id, {
         method: 'DELETE'
@@ -57,9 +59,12 @@ export default function TabelaCategoriasCortes() {
 
     if(res.ok) {
         getCategoriasCortes();
+        setShowModalExcluir(false);
+    } else {
+        const resBody = await res.json();
+        setErrorFeedback(resBody.message);
     }
 
-    setShowModalExcluir(false);
     return;
   }
 
@@ -165,6 +170,7 @@ export default function TabelaCategoriasCortes() {
         >
             <div className="text-center">Deseja realmente excluir o corte?</div>
             <div className="text-center font-light text-neutral-600">Essa acao ira excluir o corte "{selectedCategoriaCorte?.nome ?? "Nao encontrado"}" da lista de precos</div>
+            <div className="text-center font-light text-red-600">{errorFeedback}</div>
             <div className="flex justify-center gap-8 pt-8">
                 <button 
                     className="bg-red-600 text-white py-2 px-4 rounded-2xl"
@@ -173,7 +179,10 @@ export default function TabelaCategoriasCortes() {
                 ><div className="flex justify-center items-center gap-8">Excluir {loadingDelete && <Spinner />}</div></button>
                 <button 
                     className="text-neutral-600" 
-                    onClick={() => setShowModalExcluir(false)}
+                    onClick={() => {
+                        setErrorFeedback("");
+                        setShowModalExcluir(false)
+                    }}
                 >Cancelar</button>
             </div>
         </Modal>
