@@ -5,6 +5,7 @@ import Form from "../Form";
 import Input from "../input/InputField";
 import Select, { Option } from "../Select";
 import { CategoriaCorte } from "@/generated/prisma";
+import Spinner from "@/components/ui/Spinner";
 
 export default function FormAdicionarCorte({
     onSuccess,
@@ -14,17 +15,20 @@ export default function FormAdicionarCorte({
     onSubmit: (arg: any) => void
 }) {
     const [corteCategorias, setCorteCategorias] = useState<CategoriaCorte[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     useEffect(() => {
         getCategoriasCorte();
     }, [])
 
     async function getCategoriasCorte() {
+        setIsLoading(true);
         const res = await fetch('/api/categoriasCortes');
         if(res.ok) {
             const body = await res.json();
             setCorteCategorias(body.data);
         }
+        setIsLoading(false);
     }
 
     const corteCatSelectOptions: Option[] = corteCategorias?.map((categoria: CategoriaCorte) => {
@@ -51,7 +55,9 @@ export default function FormAdicionarCorte({
 
     return (
         <Form onSubmit={async (e) => {
+            setIsLoading(true);
             const corteCadastrado = await postCorte(e);
+            setIsLoading(false);
             if(corteCadastrado) {
                 onSuccess();
                 onSubmit(e);
@@ -62,9 +68,9 @@ export default function FormAdicionarCorte({
                 <Input placeholder="Nome do Corte" name="nome"/>
                 <Input placeholder="Valor" name="valor"/>
                 <div className="col-span-2">
-                    <Select placeholder="Tipo de Corte" options={corteCatSelectOptions} onChange={() => {}} name="categoriaId"/>
+                    <Select placeholder={isLoading ? "...Carregando" :"Tipo de Corte"} options={corteCatSelectOptions} onChange={() => {}} name="categoriaId"/>
                 </div> 
-                <div className="col-span-2"><button className="bg-blue-600 text-white rounded-2xl w-full py-4">Adicionar</button></div>
+                <div className="col-span-2"><button className="bg-blue-600 text-white rounded-2xl w-full py-4" disabled={isLoading}><div className="flex justify-center items-center gap-8">Adicionar {isLoading && <Spinner />}</div></button></div>
             </div>
         </Form>
     )

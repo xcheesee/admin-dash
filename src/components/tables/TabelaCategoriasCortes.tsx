@@ -17,10 +17,15 @@ import FormAdicionarCorte from "../form/cortes/FormAdicionarCorte";
 import FormEditarCorte from "../form/cortes/FormEditarCorte";
 import FormAdicionarCategoria from "../form/categoriaCorte/FormAdicionarCategoria";
 import FormEditarCategoria from "../form/categoriaCorte/FormEditarCategoria";
+import Spinner from "../ui/Spinner";
 
 export default function TabelaCategoriasCortes() {
   const [categoriasCortes, setCategoriasCortes] = useState<CorteComCategoria[]>([]);
   const [selectedCategoriaCorte, setSelectedCategoriaCorte] = useState<CorteComCategoria | null>(null);
+
+  const [loadingCategoriasCortes, setLoadingCategoriasCortes] = useState<boolean>(false);
+  const [loadingDelete, setLoadingDelete] = useState<boolean>(false);
+
   const [showModalAdicionar, setShowModalAdicionar] = useState<boolean>(false);
   const [showModalEditar, setShowModalEditar] = useState<boolean>(false);
   const [showModalExcluir, setShowModalExcluir] = useState<boolean>(false);
@@ -30,87 +35,38 @@ export default function TabelaCategoriasCortes() {
   }, [])
 
   async function getCategoriasCortes() {
+    setLoadingCategoriasCortes(true);
       const res = await fetch('/api/categoriasCortes');
       if(res.ok) {
           const body = await res.json();
           setCategoriasCortes(body.data);
       }
+      setLoadingCategoriasCortes(false);
   }
-
-  //const cortesArrChunks = useMemo(() => {
-  //  const corteCat: {[key: string]: CorteComCategoria[]} = {};
-
-  //  cortes.forEach(corte => {
-  //    if(!corteCat[corte.categoriaId]) {
-  //      corteCat[corte.categoriaId] = [corte];
-  //    } else {
-  //      corteCat[corte.categoriaId].push(corte);
-  //    }
-  //  });
-
-  //  const cortesArr = Object.values(corteCat);
-
-  //  return chunkArray(cortesArr, 2);
-
-  //}, [cortes])
-
-  //function formatarPdfCortes() {
-  //  const pdfContent: any[] = [];
-  //  cortesArrChunks.forEach((chunk) => {
-  //    let columns: any = [];
-  //    chunk.forEach((corteArr: CorteComCategoria[]) => {
-  //      let colVal = {
-  //        layout: 'lightHorizontalLines', // optional
-  //        table: {
-  //          // headers are automatically repeated if the table spans over multiple pages
-  //          // you can declare how many rows should be treated as headers
-  //          headerRows: 1,
-  //          widths: [ '*', 'auto'],
-  //          body: [
-  //            [ { text: corteArr[0].categoria.nome, colSpan: 2, alignment: 'center'}, "" ],
-  //          ]
-  //        }
-  //      };
-
-  //      corteArr.forEach((corte) => {
-  //        let corteLine = [corte.nome, corte.valor];
-  //        colVal.table.body.push(corteLine);
-  //      });
-
-  //      columns.push(colVal);
-  //    })
-  //    pdfContent.push({columns: columns, columnGap: 50});
-  //  })
-
-  //  return pdfContent;
-
-  //}
-
-  //function gerarPdfCortes() {
-  //  var dd = {
-  //    content: formatarPdfCortes()
-  //  }
-  //  pdfMake.createPdf(dd).open();
-  //}
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     getCategoriasCortes();
   }
 
   async function onDeletePress() {
+    setLoadingDelete(true);
     const res = await fetch('/api/categoriasCortes/' + selectedCategoriaCorte?.id, {
         method: 'DELETE'
     });
+    setLoadingDelete(false);
 
     if(res.ok) {
-        setShowModalExcluir(false);
         getCategoriasCortes();
-        return;
     }
 
     setShowModalExcluir(false);
     return;
   }
+
+  if(loadingCategoriasCortes) return (
+    <div className="flex justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" strokeDasharray="16" strokeDashoffset="16" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3c4.97 0 9 4.03 9 9"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="16;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></svg>
+    </div>);
 
   return (
     <>
@@ -212,8 +168,9 @@ export default function TabelaCategoriasCortes() {
             <div className="flex justify-center gap-8 pt-8">
                 <button 
                     className="bg-red-600 text-white py-2 px-4 rounded-2xl"
+                    disabled={loadingDelete}
                     onClick={onDeletePress}
-                >Excluir</button>
+                ><div className="flex justify-center items-center gap-8">Excluir {loadingDelete && <Spinner />}</div></button>
                 <button 
                     className="text-neutral-600" 
                     onClick={() => setShowModalExcluir(false)}
